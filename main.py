@@ -1,8 +1,14 @@
-exit_str = ""
 user_todos = []
 
-while "exit" not in user_todos:
-    user_todos.append(input("Add new task: "))
+while True:
+    match input("Type add, show or exit: "):
+        case 'add':
+            user_todos.append(input("Enter a todo: "))
+        case 'show':
+            print(user_todos)
+        case 'exit':
+            break
+        case _ :
+            print("Your command did not match, please try again")
 
-user_todos.pop()
-print(user_todos)
+print("Bye, bye!")
