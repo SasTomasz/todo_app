@@ -2,8 +2,8 @@ user_todos = []
 
 
 def show_todos():
-    for todo in user_todos:
-        print(str(user_todos.index(todo) + 1) + '.', todo)
+    for i, todo in enumerate(user_todos):
+        print(f"{i + 1}. {todo}")
 
 
 while True:
