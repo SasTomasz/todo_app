@@ -2,8 +2,7 @@ def show_todos():
     if user_todos:
         print("There are Your todos: ")
         for i, todo in enumerate(user_todos):
-            todo = todo.removesuffix('\n')
-            print(f"{i + 1}. {todo}")
+            print(f"{i + 1}. {todo}", end='')
         return True
     else:
         print("You don't have any todos.")
