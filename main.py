@@ -1,3 +1,18 @@
+import logging
+import os
+
+logging.basicConfig(filename="../logs.log",
+                    format='%(asctime)s %(message)s',
+                    filemode='a',
+                    encoding='utf-8',
+                    level=logging.DEBUG)
+logger = logging.getLogger()
+logger.setLevel(logging.DEBUG)
+
+
+# logger.addHandler(logging.StreamHandler(sys.stdout))
+
+
 def show_todos():
     if user_todos:
         print("There are Your todos: ")
@@ -17,23 +32,31 @@ def is_todo_number_correct(number):
 
 def get_todos_from_file(path='./data/todos.txt'):
     try:
-        file = open(path, "r")
-        todos = file.readlines()
-        file.close()
+        with open(path, "r") as file:
+            todos = file.readlines()
     except FileNotFoundError:
-        file = open(path, "w")
-        file.close()
+        current_directory = os.getcwd()
+        new_directory_name = "data"
+        path = os.path.join(current_directory, new_directory_name)
+        try:
+            os.makedirs(path, exist_ok=True)
+            logger.info("Directory '%s' created successfully" % new_directory_name)
+            with open(path, "w") as file:
+                file.close()
+        except OSError as error:
+            logger.info("Directory '%s' can not be created" % new_directory_name)
+            logger.error(error.strerror)
         return []
     return todos
 
 
 def save_todos(todos, path='./data/todos.txt'):
-    file = open(path, "w")
-    file.writelines(todos)
-    file.close()
+    with open(path, "w") as file:
+        file.writelines(todos)
 
 
 user_todos = get_todos_from_file()
+logger.info(f"Current directory is: {os.getcwd()}")
 
 while True:
     match input("Type add, edit, complete, show or exit: ").strip():
@@ -67,3 +90,5 @@ while True:
             print("Your command did not match, please try again")
 
 print("Bye, bye!")
+# fixme:
+#  2. User can type with edit end complete negative number with cause working on wrong element
