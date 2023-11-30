@@ -59,6 +59,7 @@ user_todos = get_todos_from_file()
 logger.info(f"Current directory is: {os.getcwd()}")
 
 while True:
+    # TODO: Change this logic to user can type command and todo in one line, i. e.: add clean the kitchen
     match input("Type add, edit, complete, show or exit: ").strip():
         case 'add':
             user_todos.append(input("Enter a todo: ") + '\n')
