@@ -25,7 +25,7 @@ def show_todos():
 
 
 def is_todo_number_correct(number):
-    while number > len(user_todos) or number == 0:
+    while number > len(user_todos) or number <= 0:
         number = int(input("Please type correct number: "))
     return number
 
@@ -80,7 +80,7 @@ while True:
             if user_todos:
                 todo_number = int(input("What todo number do You want to complete?: "))
                 todo_number = is_todo_number_correct(todo_number)
-                completed_todo = user_todos.pop(todo_number - 1)
+                completed_todo = user_todos.pop(todo_number - 1).strip('\n')
                 save_todos(user_todos)
                 print(f"TASK {completed_todo}, was completed")
                 show_todos()
@@ -90,5 +90,3 @@ while True:
             print("Your command did not match, please try again")
 
 print("Bye, bye!")
-# fixme:
-#  2. User can type with edit end complete negative number with cause working on wrong element
