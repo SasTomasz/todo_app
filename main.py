@@ -64,18 +64,26 @@ while True:
         user_todos.append(user_input[4:] + '\n')
         print(f"TODO: {user_input[4:]} was added")
         save_todos(user_todos)
+
     elif 'show' in user_input:
         show_todos()
+
     elif 'edit' in user_input:
-        show_todos()
         if user_todos:
-            todo_number = int(input("What todo number do You want to edit?: "))
+            todo_number = int(user_input[5:])
             todo_number = is_todo_number_correct(todo_number)
-            new_todo = input("Type new todo description: ") + '\n'
-            user_todos[todo_number - 1] = new_todo
-            save_todos(user_todos)
-            print("Todo was updated")
-            show_todos()
+            print(f"Todo number {todo_number}: {user_todos[todo_number - 1]}", end='')
+            delete = input("Are you sure you want to edit? y/n: ")
+            if delete == 'y':
+                new_todo = input("Type new todo description: ") + '\n'
+                user_todos[todo_number - 1] = new_todo
+                save_todos(user_todos)
+                print("Todo was updated")
+            elif delete == 'n':
+                print("Todo was not updated")
+            else:
+                print("Wrong value, try again")
+
     elif 'complete' in user_input:
         show_todos()
         if user_todos:
@@ -85,9 +93,14 @@ while True:
             save_todos(user_todos)
             print(f"TASK {completed_todo}, was completed")
             show_todos()
+
     elif 'exit' in user_input:
         break
+
     else:
         print("Your command did not match, please try again")
 
 print("Bye, bye!")
+
+# fixme When user type "edit" without a number there will be error
+# todo clear the console more frequently
