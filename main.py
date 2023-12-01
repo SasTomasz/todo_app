@@ -59,35 +59,35 @@ user_todos = get_todos_from_file()
 logger.info(f"Current directory is: {os.getcwd()}")
 
 while True:
-    # TODO: Change this logic to user can type command and todo in one line, i. e.: add clean the kitchen
-    match input("Type add, edit, complete, show or exit: ").strip():
-        case 'add':
-            user_todos.append(input("Enter a todo: ") + '\n')
+    user_input = input("Type add, edit, complete, show or exit: ")
+    if 'add' in user_input:
+        user_todos.append(user_input[4:] + '\n')
+        print(f"TODO: {user_input[4:]} was added")
+        save_todos(user_todos)
+    elif 'show' in user_input:
+        show_todos()
+    elif 'edit' in user_input:
+        show_todos()
+        if user_todos:
+            todo_number = int(input("What todo number do You want to edit?: "))
+            todo_number = is_todo_number_correct(todo_number)
+            new_todo = input("Type new todo description: ") + '\n'
+            user_todos[todo_number - 1] = new_todo
             save_todos(user_todos)
-        case 'show':
+            print("Todo was updated")
             show_todos()
-        case 'edit':
+    elif 'complete' in user_input:
+        show_todos()
+        if user_todos:
+            todo_number = int(input("What todo number do You want to complete?: "))
+            todo_number = is_todo_number_correct(todo_number)
+            completed_todo = user_todos.pop(todo_number - 1).strip('\n')
+            save_todos(user_todos)
+            print(f"TASK {completed_todo}, was completed")
             show_todos()
-            if user_todos:
-                todo_number = int(input("What todo number do You want to edit?: "))
-                todo_number = is_todo_number_correct(todo_number)
-                new_todo = input("Type new todo description: ") + '\n'
-                user_todos[todo_number - 1] = new_todo
-                save_todos(user_todos)
-                print("Todo was updated")
-                show_todos()
-        case 'complete':
-            show_todos()
-            if user_todos:
-                todo_number = int(input("What todo number do You want to complete?: "))
-                todo_number = is_todo_number_correct(todo_number)
-                completed_todo = user_todos.pop(todo_number - 1).strip('\n')
-                save_todos(user_todos)
-                print(f"TASK {completed_todo}, was completed")
-                show_todos()
-        case 'exit':
-            break
-        case _:
-            print("Your command did not match, please try again")
+    elif 'exit' in user_input:
+        break
+    else:
+        print("Your command did not match, please try again")
 
 print("Bye, bye!")
