@@ -58,6 +58,25 @@ def save_todos(todos, path='./data/todos.txt'):
 user_todos = get_todos_from_file()
 logger.info(f"Current directory is: {os.getcwd()}")
 
+
+def operating_on_todo(task_number, operation_type='edit'):
+    print(f"Todo number {task_number}: {user_todos[task_number - 1]}", end='')
+    want_modify = input(f"Are you sure you want to {operation_type}? y/n: ")
+    if want_modify == 'y':
+        if operation_type == 'edit':
+            new_todo = input("Type new todo description: ") + '\n'
+            user_todos[task_number - 1] = new_todo
+            save_todos(user_todos)
+        elif operation_type == 'complete':
+            user_todos.pop(task_number - 1).strip('\n')
+            save_todos(user_todos)
+        print("Todo was updated")
+    elif want_modify == 'n':
+        print("Todo was not updated")
+    else:
+        print("Wrong value, try again")
+
+
 while True:
     user_input = input("Type add, edit, complete, show or exit: ")
     if 'add' in user_input:
@@ -70,29 +89,21 @@ while True:
 
     elif 'edit' in user_input:
         if user_todos:
-            todo_number = int(user_input[5:])
+            try:
+                todo_number = int(user_input[5:])
+            except ValueError:
+                todo_number = int(input("Please type the correct number of todo You want to edit: "))
             todo_number = is_todo_number_correct(todo_number)
-            print(f"Todo number {todo_number}: {user_todos[todo_number - 1]}", end='')
-            delete = input("Are you sure you want to edit? y/n: ")
-            if delete == 'y':
-                new_todo = input("Type new todo description: ") + '\n'
-                user_todos[todo_number - 1] = new_todo
-                save_todos(user_todos)
-                print("Todo was updated")
-            elif delete == 'n':
-                print("Todo was not updated")
-            else:
-                print("Wrong value, try again")
+            operating_on_todo(todo_number)
 
     elif 'complete' in user_input:
-        show_todos()
         if user_todos:
-            todo_number = int(input("What todo number do You want to complete?: "))
+            try:
+                todo_number = int(user_input[9:])
+            except ValueError:
+                todo_number = int(input("Please type the correct number of todo You want to complete:"))
             todo_number = is_todo_number_correct(todo_number)
-            completed_todo = user_todos.pop(todo_number - 1).strip('\n')
-            save_todos(user_todos)
-            print(f"TASK {completed_todo}, was completed")
-            show_todos()
+            operating_on_todo(todo_number, operation_type='complete')
 
     elif 'exit' in user_input:
         break
@@ -102,5 +113,5 @@ while True:
 
 print("Bye, bye!")
 
-# fixme When user type "edit" without a number there will be error
-# todo clear the console more frequently
+# fixme:
+#  2. User can add empty task if type for example "add "
