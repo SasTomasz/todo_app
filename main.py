@@ -80,6 +80,8 @@ def operating_on_todo(task_number, operation_type='edit'):
 while True:
     user_input = input("Type add, edit, complete, show or exit: ")
     if 'add' in user_input:
+        if user_input[4:] == '':
+            user_input += f' {input("Please type some task description: ")}'
         user_todos.append(user_input[4:] + '\n')
         print(f"TODO: {user_input[4:]} was added")
         save_todos(user_todos)
@@ -112,6 +114,3 @@ while True:
         print("Your command did not match, please try again")
 
 print("Bye, bye!")
-
-# fixme:
-#  2. User can add empty task if type for example "add "
