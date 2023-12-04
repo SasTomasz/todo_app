@@ -1,6 +1,8 @@
 import logging
 import os
 
+NO_TODOS = "You don't have any todos."
+
 logging.basicConfig(filename="../logs.log",
                     format='%(asctime)s %(message)s',
                     filemode='a',
@@ -20,7 +22,7 @@ def show_todos():
             print(f"{i + 1}. {todo}", end='')
         return True
     else:
-        print("You don't have any todos.")
+        print(NO_TODOS)
         return False
 
 
@@ -59,7 +61,7 @@ user_todos = get_todos_from_file()
 logger.info(f"Current directory is: {os.getcwd()}")
 
 
-def operating_on_todo(task_number, operation_type='edit'):
+def operating_on_todo(task_number, operation_type):
     print(f"Todo number {task_number}: {user_todos[task_number - 1]}", end='')
     want_modify = input(f"Are you sure you want to {operation_type}? y/n: ")
     if want_modify == 'y':
@@ -79,35 +81,39 @@ def operating_on_todo(task_number, operation_type='edit'):
 
 while True:
     user_input = input("Type add, edit, complete, show or exit: ")
-    if 'add' in user_input:
+    if user_input.startswith('add'):
         if user_input[4:] == '':
             user_input += f' {input("Please type some task description: ")}'
         user_todos.append(user_input[4:] + '\n')
         print(f"TODO: {user_input[4:]} was added")
         save_todos(user_todos)
 
-    elif 'show' in user_input:
+    elif user_input.startswith('show'):
         show_todos()
 
-    elif 'edit' in user_input:
+    elif user_input.startswith('edit'):
         if user_todos:
             try:
                 todo_number = int(user_input[5:])
             except ValueError:
                 todo_number = int(input("Please type the correct number of todo You want to edit: "))
             todo_number = is_todo_number_correct(todo_number)
-            operating_on_todo(todo_number)
+            operating_on_todo(todo_number, operation_type='edit')
+        else:
+            print(NO_TODOS)
 
-    elif 'complete' in user_input:
+    elif user_input.startswith('complete'):
         if user_todos:
             try:
                 todo_number = int(user_input[9:])
             except ValueError:
-                todo_number = int(input("Please type the correct number of todo You want to complete:"))
+                todo_number = int(input("Please type the correct number of todo You want to complete: "))
             todo_number = is_todo_number_correct(todo_number)
             operating_on_todo(todo_number, operation_type='complete')
+        else:
+            print(NO_TODOS)
 
-    elif 'exit' in user_input:
+    elif user_input.startswith('exit'):
         break
 
     else:
