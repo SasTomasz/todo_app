@@ -42,11 +42,11 @@ def get_todos_from_file(path='./data/todos.txt'):
         path = os.path.join(current_directory, new_directory_name)
         try:
             os.makedirs(path, exist_ok=True)
-            logger.info("Directory '%s' created successfully" % new_directory_name)
+            logger.info(f"Directory {new_directory_name} created successfully")
             with open(path, "w") as file:
                 file.close()
         except OSError as error:
-            logger.info("Directory '%s' can not be created" % new_directory_name)
+            logger.info(f"Directory {new_directory_name} can not be created")
             logger.error(error.strerror)
         return []
     return todos
