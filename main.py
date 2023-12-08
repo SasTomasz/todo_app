@@ -16,6 +16,12 @@ logger.setLevel(logging.DEBUG)
 
 
 def show_todos():
+    """
+    Show user todos listed in separate lines. If user don't have any todos
+    print information about it
+    :return: True if user has todos or False otherwise
+    :rtype: bool
+    """
     if user_todos:
         print("There are Your todos: ")
         for i, todo in enumerate(user_todos):
@@ -27,6 +33,13 @@ def show_todos():
 
 
 def is_todo_number_correct(number):
+    """
+    Check is there a task with particular number and if a number is positive.
+    If not program ask user to type correct number.
+    :param int number: A task id
+    :return: Correct task number
+    :rtype: int
+    """
     while number > len(user_todos) or number <= 0:
         number = int(input("Please type correct number: "))
     return number
