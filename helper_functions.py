@@ -61,7 +61,8 @@ def save_todos(todos, path='./data/todos.txt'):
         file.writelines(todos)
 
 
-# TODO Simplify this function to do one thing
+# TODO
+#  * Simplify this function to do one thing
 def operating_on_todo(task_number: int, operation_type: str, user_todos: list[str]):
     """
     Operate on specific task. It can be edits or completes. Func finishes with new version of the task list save on
