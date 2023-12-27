@@ -11,21 +11,27 @@ todos = helper_functions.get_todos_from_file()
 list_box = sg.Listbox(todos,
                       enable_events=True,
                       key="todos_list",
-                      size=(60, 20))
+                      size=(58, 20))
 
 window = sg.Window("My todo app",
                    layout=[[text_field_desc, text_field, add_button],
                            [list_box, edit_button]])
 while True:
     event, value = window.read()
-    logger.info(f"Event was occurred:\nevent: {event}\nvalue: {value['todo']}")
+    logger.info(f"Event was occurred:\nevent: {event}\nvalue: {value}")
     if event == 'Add':
-        todos.append(value['todo'])
+        todos.append(value['todo'] + '\n')
         helper_functions.save_todos(todos)
+        window['todos_list'].update(todos)
+    elif event == 'Edit':
+        todo_index = todos.index(value['todos_list'][0])
+        todos[todo_index] = value['todo'] + '\n'
+        helper_functions.save_todos(todos)
+        window['todos_list'].update(todos)
+    elif event == 'todos_list':
+        window['todo'].update(value['todos_list'][0])
     elif event == sg.WIN_CLOSED:
         break
 
 window.close()
 
-# TODO
-#  * Implement edit button
