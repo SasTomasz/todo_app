@@ -13,11 +13,12 @@ list_box = sg.Listbox(todos,
                       enable_events=True,
                       key="todos_list",
                       size=(58, 10))
+exit_button = sg.Button("Exit")
 
 window = sg.Window("My todo app",
                    layout=[[text_field_desc, text_field, add_button],
-                           [list_box, edit_button],
-                           [complete_button]])
+                           [list_box, edit_button, complete_button],
+                           [exit_button]])
 while True:
     event, value = window.read()
     logger.info(f"Event was occurred:\nevent: {event}\nvalue: {value}")
@@ -32,6 +33,14 @@ while True:
         window['todos_list'].update(todos)
     elif event == 'todos_list':
         window['todo'].update(value['todos_list'][0])
+    elif event == 'Complete':
+        completed_todo = value['todos_list'][0]
+        todos.remove(completed_todo)
+        helper_functions.save_todos(todos)
+        window['todo'].update(value='')
+        window['todos_list'].update(todos)
+    elif event == 'Exit':
+        break
     elif event == sg.WIN_CLOSED:
         break
 
