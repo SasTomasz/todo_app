@@ -14,18 +14,23 @@ list_box = sg.Listbox(todos,
                       key="todos_list",
                       size=(58, 10))
 exit_button = sg.Button("Exit")
+info_field = sg.Text(key='info')
 
 window = sg.Window("My todo app",
                    layout=[[text_field_desc, text_field, add_button],
                            [list_box, edit_button, complete_button],
-                           [exit_button]])
+                           [exit_button, info_field]])
 while True:
     event, value = window.read()
     logger.info(f"Event was occurred:\nevent: {event}\nvalue: {value}")
     if event == 'Add':
-        todos.append(value['todo'] + '\n')
-        helper_functions.save_todos(todos)
-        window['todos_list'].update(todos)
+        if value['todo']:
+            todos.append(value['todo'] + '\n')
+            helper_functions.save_todos(todos)
+            window['todos_list'].update(todos)
+            window['info'].update('')
+        else:
+            window['info'].update("Please write some todo's name")
     elif event == 'Edit':
         todo_index = todos.index(value['todos_list'][0])
         todos[todo_index] = value['todo'] + '\n'
@@ -45,4 +50,9 @@ while True:
         break
 
 window.close()
+
+# TODO
+#  Fix this errors:
+#  * User can tap Complete button when nothing is selected what produce an IndexError
+#  * User can tap Edit button when nothing is selected what produce an IndexError
 
