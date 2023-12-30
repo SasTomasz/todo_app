@@ -32,27 +32,32 @@ while True:
         else:
             window['info'].update("Please write some todo's name")
     elif event == 'Edit':
-        todo_index = todos.index(value['todos_list'][0])
-        todos[todo_index] = value['todo'] + '\n'
-        helper_functions.save_todos(todos)
-        window['todos_list'].update(todos)
+        try:
+            todo_index = todos.index(value['todos_list'][0])
+            todos[todo_index] = value['todo'] + '\n'
+            helper_functions.save_todos(todos)
+            window['todos_list'].update(todos)
+            window['info'].update('')
+        except IndexError:
+            window['info'].update("Please select some todo")
+
     elif event == 'todos_list':
         window['todo'].update(value['todos_list'][0])
     elif event == 'Complete':
-        completed_todo = value['todos_list'][0]
-        todos.remove(completed_todo)
-        helper_functions.save_todos(todos)
-        window['todo'].update(value='')
-        window['todos_list'].update(todos)
+        try:
+            completed_todo = value['todos_list'][0]
+            todos.remove(completed_todo)
+            helper_functions.save_todos(todos)
+            window['todo'].update(value='')
+            window['todos_list'].update(todos)
+            window['info'].update('')
+        except IndexError:
+            window['info'].update("Please select some todo")
+
     elif event == 'Exit':
         break
     elif event == sg.WIN_CLOSED:
         break
 
 window.close()
-
-# TODO
-#  Fix this errors:
-#  * User can tap Complete button when nothing is selected what produce an IndexError
-#  * User can tap Edit button when nothing is selected what produce an IndexError
 
