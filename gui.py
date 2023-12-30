@@ -1,8 +1,10 @@
 import PySimpleGUI as sg
 
 import helper_functions
+import time
 from logger import logger
 
+clock = sg.Text('', key='clock')
 text_field_desc = sg.Text("Add some todo")
 text_field = sg.InputText(key="todo")
 add_button = sg.Button("Add")
@@ -14,14 +16,15 @@ list_box = sg.Listbox(todos,
                       key="todos_list",
                       size=(58, 10))
 exit_button = sg.Button("Exit")
-info_field = sg.Text(key='info')
 
-window = sg.Window("My todo app",
-                   layout=[[text_field_desc, text_field, add_button],
+window = sg.Window("My todo app", font='Helvetica 20',
+                   layout=[[clock],
+                           [text_field_desc, text_field, add_button],
                            [list_box, edit_button, complete_button],
-                           [exit_button, info_field]])
+                           [exit_button]])
 while True:
-    event, value = window.read()
+    event, value = window.read(timeout=200)
+    window['clock'].update(time.strftime('%A, %m-%d-%Y %H:%M:%S'))
     logger.info(f"Event was occurred:\nevent: {event}\nvalue: {value}")
     if event == 'Add':
         if value['todo']:
@@ -30,16 +33,15 @@ while True:
             window['todos_list'].update(todos)
             window['info'].update('')
         else:
-            window['info'].update("Please write some todo's name")
+            sg.Popup("Please write some todo's name", font='Helvetica 20')
     elif event == 'Edit':
         try:
             todo_index = todos.index(value['todos_list'][0])
             todos[todo_index] = value['todo'] + '\n'
             helper_functions.save_todos(todos)
             window['todos_list'].update(todos)
-            window['info'].update('')
         except IndexError:
-            window['info'].update("Please select some todo")
+            sg.Popup("Please select some todo", font='Helvetica 20')
 
     elif event == 'todos_list':
         window['todo'].update(value['todos_list'][0])
@@ -50,10 +52,8 @@ while True:
             helper_functions.save_todos(todos)
             window['todo'].update(value='')
             window['todos_list'].update(todos)
-            window['info'].update('')
         except IndexError:
-            window['info'].update("Please select some todo")
-
+            sg.Popup("Please select some todo", font='Helvetica 20')
     elif event == 'Exit':
         break
     elif event == sg.WIN_CLOSED:
@@ -61,3 +61,5 @@ while True:
 
 window.close()
 
+# TODO
+#  * Fix stop clock when popup shows
