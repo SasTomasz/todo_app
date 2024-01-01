@@ -1,6 +1,6 @@
 import PySimpleGUI as sg
 
-import helper_functions
+import todo_processing
 import time
 from logger import logger
 
@@ -10,7 +10,7 @@ text_field = sg.InputText(key="todo")
 add_button = sg.Button("Add")
 edit_button = sg.Button("Edit")
 complete_button = sg.Button("Complete")
-todos = helper_functions.get_todos_from_file()
+todos = todo_processing.get_todos_from_file()
 list_box = sg.Listbox(todos,
                       enable_events=True,
                       key="todos_list",
@@ -29,19 +29,24 @@ while True:
     if event == 'Add':
         if value['todo']:
             todos.append(value['todo'] + '\n')
-            helper_functions.save_todos(todos)
+            todo_processing.save_todos(todos)
             window['todos_list'].update(todos)
             window['info'].update('')
         else:
-            sg.Popup("Please write some todo's name", font='Helvetica 20')
+            sg.Popup("Please write some todo's name",
+                     font='Helvetica 20',
+                     non_blocking=True)
     elif event == 'Edit':
         try:
             todo_index = todos.index(value['todos_list'][0])
             todos[todo_index] = value['todo'] + '\n'
-            helper_functions.save_todos(todos)
+            todo_processing.save_todos(todos)
             window['todos_list'].update(todos)
         except IndexError:
-            sg.Popup("Please select some todo", font='Helvetica 20')
+            sg.Popup("Please select some todo",
+                     font='Helvetica 20',
+                     non_blocking=True)
+            logger.info("In Except line")
 
     elif event == 'todos_list':
         window['todo'].update(value['todos_list'][0])
@@ -49,17 +54,16 @@ while True:
         try:
             completed_todo = value['todos_list'][0]
             todos.remove(completed_todo)
-            helper_functions.save_todos(todos)
+            todo_processing.save_todos(todos)
             window['todo'].update(value='')
             window['todos_list'].update(todos)
         except IndexError:
-            sg.Popup("Please select some todo", font='Helvetica 20')
+            sg.Popup("Please select some todo",
+                     font='Helvetica 20',
+                     non_blocking=True)
     elif event == 'Exit':
         break
     elif event == sg.WIN_CLOSED:
         break
 
 window.close()
-
-# TODO
-#  * Fix stop clock when popup shows
