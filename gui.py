@@ -24,14 +24,13 @@ window = sg.Window("My todo app", font='Helvetica 20',
                            [exit_button]])
 while True:
     event, value = window.read(timeout=200)
-    window['clock'].update(time.strftime('%A, %m-%d-%Y %H:%M:%S'))
+    window['clock'].update(time.strftime('%A, %d-%m-%Y %H:%M:%S'))
     logger.info(f"Event was occurred:\nevent: {event}\nvalue: {value}")
     if event == 'Add':
         if value['todo']:
             todos.append(value['todo'] + '\n')
             todo_processing.save_todos(todos)
             window['todos_list'].update(todos)
-            window['info'].update('')
         else:
             sg.Popup("Please write some todo's name",
                      font='Helvetica 20',
@@ -49,7 +48,7 @@ while True:
             logger.info("In Except line")
 
     elif event == 'todos_list':
-        window['todo'].update(value['todos_list'][0])
+        window['todo'].update(value['todos_list'][0].strip('\n'))
     elif event == 'Complete':
         try:
             completed_todo = value['todos_list'][0]
