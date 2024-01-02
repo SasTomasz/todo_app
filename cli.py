@@ -24,9 +24,11 @@ while True:
             try:
                 todo_number = int(user_input[5:])
             except ValueError:
-                todo_number = int(input("Please type the correct number of todo You want to edit: "))
-            todo_number = todo_processing.is_todo_number_correct(todo_number, user_todos)
-            todo_processing.operating_on_todo(todo_number, 'edit', user_todos)
+                todo_number = int(input(
+                    "Please type the correct number of todo You want to edit: "))
+            todo_number = todo_processing.is_todo_number_correct(todo_number,
+                                                                 user_todos)
+            todo_processing.edit_todo(todo_number, user_todos)
         else:
             print(constants.NO_TODOS)
 
@@ -35,9 +37,11 @@ while True:
             try:
                 todo_number = int(user_input[9:])
             except ValueError:
-                todo_number = int(input("Please type the correct number of todo You want to complete: "))
-            todo_number = todo_processing.is_todo_number_correct(todo_number, user_todos)
-            todo_processing.operating_on_todo(todo_number, 'complete', user_todos)
+                todo_number = int(input(
+                    "Please type the correct number of todo You want to complete: "))
+            todo_number = todo_processing.is_todo_number_correct(todo_number,
+                                                                 user_todos)
+            todo_processing.complete_todo(todo_number, user_todos)
         else:
             print(constants.NO_TODOS)
 

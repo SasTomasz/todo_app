@@ -61,26 +61,38 @@ def save_todos(todos, path='./data/todos.txt'):
         file.writelines(todos)
 
 
-# TODO
-#  * Simplify this function to do one thing
-def operating_on_todo(task_number: int, operation_type: str, user_todos: list[str]):
+def edit_todo(task_number: int, user_todos: list[str]):
     """
-    Operate on specific task. It can be edits or completes. Func finishes with new version of the task list save on
+    Edit existing todo. Func finishes with new version of the task list save on
     the machine
-    :param int task_number: Number of task user want to operate on
-    :param str operation_type: 'edit' or 'complete' string
-    :param list[str] user_todos: list of user todos
+    :param task_number: todo user want to edit
+    :param user_todos: list of all user todos
     """
     print(f"Todo number {task_number}: {user_todos[task_number - 1]}", end='')
-    want_modify = input(f"Are you sure you want to {operation_type}? y/n: ")
+    want_modify = input(f"Are you sure you want to edit? y/n: ")
     if want_modify == 'y':
-        if operation_type == 'edit':
-            new_todo = input("Type new todo description: ") + '\n'
-            user_todos[task_number - 1] = new_todo
-            save_todos(user_todos)
-        elif operation_type == 'complete':
-            user_todos.pop(task_number - 1).strip('\n')
-            save_todos(user_todos)
+        new_todo = input("Type new todo description: ") + '\n'
+        user_todos[task_number - 1] = new_todo
+        save_todos(user_todos)
+        print("Todo was updated")
+    elif want_modify == 'n':
+        print("Todo was not updated")
+    else:
+        print("Wrong value, try again")
+
+
+def complete_todo(task_number: int, user_todos: list[str]):
+    """
+    Remove existing todo from list. Func finishes with new version of the task
+    list save on the machine
+    :param task_number: number of todo user want to edit
+    :param user_todos: list of all user todos
+    """
+    print(f"Todo number {task_number}: {user_todos[task_number - 1]}", end='')
+    want_modify = input(f"Are you sure you want to complete? y/n: ")
+    if want_modify == 'y':
+        user_todos.pop(task_number - 1).strip('\n')
+        save_todos(user_todos)
         print("Todo was updated")
     elif want_modify == 'n':
         print("Todo was not updated")
