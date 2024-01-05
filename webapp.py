@@ -1,18 +1,21 @@
 import streamlit as st
 import todo_processing
+from logger import logger
+
+
+def add_todo():
+    new_todo = st.session_state['new_todo']
+    todos.append(new_todo + '\n')
+    todo_processing.save_todos(todos)
+
 
 todos = todo_processing.get_todos_from_file()
 
 st.title("My todo app")
 
 for todo in todos:
-    st.checkbox(todo)
+    logger.info(f"In {__name__}: checkbox number: {todos.index(todo)}")
+    st.checkbox(todo, key=todos.index(todo))
 
-new_todo = st.text_input(label="New todo", placeholder="Type a new todo")
-todos.append(new_todo + '\n')
-todo_processing.save_todos(todos)
-print(new_todo)
-# TODO
-#   * Fix problem with saving new todo. It show on list after the next one is enter
-
-
+st.text_input(label='', placeholder="Type a new todo", key="new_todo",
+              on_change=add_todo())
